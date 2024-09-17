@@ -28,7 +28,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     <link rel='icon' type='image/png' sizes='32x32' href='favicon-32x32.png'>
     <link rel='icon' type='image/png' sizes='96x96' href='favicon-96x96.png'>
     <link rel='stylesheet' href='css/common.css'>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+
     <title>Immersive VR Session</title>
   </head>
   <body>
@@ -69,29 +69,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       let gl = null;
       let renderer = null;
       let scene = new Scene();
-
-      // Add GLTF model and Skybox
       scene.addNode(new Gltf2Node({url: 'media/gltf/space/forest-2.glb'}));
-      scene.addNode(new SkyboxNode({url: 'media/textures/sunset.jpg'}));
+      scene.addNode(new SkyboxNode({url: 'media/textures/sunset.png'}));
 
-      // Add Lighting
-      function addLighting() {
-        // Ambient Light
-        const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
-        scene.addNode(ambientLight);
-
-        // Directional Light
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1); // White directional light
-        directionalLight.position.set(1, 1, 1).normalize();
-        scene.addNode(directionalLight);
-
-        // Point Light (optional)
-        const pointLight = new THREE.PointLight(0xff0000, 1, 100); // Red point light
-        pointLight.position.set(10, 10, 10);
-        scene.addNode(pointLight);
-      }
-      
-      addLighting(); // Call function to add lights
 
       // Checks to see if WebXR is available and, if so, queries a list of
       // XRDevices that are connected to the system.
