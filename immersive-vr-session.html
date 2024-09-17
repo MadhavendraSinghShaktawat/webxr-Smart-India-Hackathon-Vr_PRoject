@@ -72,15 +72,15 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       scene.addNode(new Gltf2Node({url: 'media/gltf/space/forest.glb'}));
       scene.addNode(new SkyboxNode({url: 'media/textures/sky.jpg'}));
 
-      import { DirectionalLight } from './js/render/lights/directional-light.js'; // Ensure this is correctly imported
+//       import { DirectionalLight } from './js/render/lights/directional-light.js'; // Ensure this is correctly imported
 
-let sunlight = new DirectionalLight({
-  color: 0xffffff,   // White light
-  intensity: 1.5,    // Adjust as necessary
-  direction: [1, -1, -0.5] // Direction of sunlight
-});
+// let sunlight = new DirectionalLight({
+//   color: 0xffffff,   // White light
+//   intensity: 1.5,    // Adjust as necessary
+//   direction: [1, -1, -0.5] // Direction of sunlight
+// });
 
-scene.addNode(sunlight); // Add the sunlight to the scene
+// scene.addNode(sunlight); // Add the sunlight to the scene
 
       // Checks to see if WebXR is available and, if so, queries a list of
       // XRDevices that are connected to the system.
