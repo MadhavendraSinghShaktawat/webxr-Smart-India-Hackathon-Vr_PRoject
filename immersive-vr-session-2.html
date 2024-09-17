@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1, user-scalable=no'>
+    <meta name='mobile-web-app-capable' content='yes'>
+    <meta name='apple-mobile-web-app-capable' content='yes'>
+    <link rel='icon' type='image/png' sizes='32x32' href='favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='96x96' href='favicon-96x96.png'>
+    <link rel='stylesheet' href='css/common.css'>
+    <title>Immersive VR Session</title>
+  </head>
+  <body>
+    <header>
+      <details open>
+        <summary>Immersive VR Session</summary>
+        <p>
+          This sample demonstrates how to use an 'immersive-vr' XRSession to
+          present a simple WebGL scene to an XR device. The scene is not
+          rendered to the page.
+          <a class="back" href="./">Back</a>
+        </p>
+      </details>
+    </header>
+    <main style='text-align: center;'>
+      <p>Click 'Enter XR' to see content</p> 
+    </main>
+    <script type="module">
+      import { WebXRButton } from './js/util/webxr-button.js';
+      import { Scene } from './js/render/scenes/scene.js';
+      import { Renderer, createWebGLContext } from './js/render/core/renderer.js';
+      import { Gltf2Node } from './js/render/nodes/gltf2.js';
+      import { SkyboxNode } from './js/render/nodes/skybox.js';
+      import { DirectionalLight } from './js/render/lights/directional-light.js'; // Importing DirectionalLight
+      import { QueryArgs } from './js/util/query-args.js';
+
+      import WebXRPolyfill from './js/third-party/webxr-polyfill/build/webxr-polyfill.module.js';
+      if (QueryArgs.getBool('usePolyfill', true)) {
+        let polyfill = new WebXRPolyfill();
+      }
+
+      let xrButton = null;
+      let xrRefSpace = null;
+      let gl = null;
+      let renderer = null;
+      let scene = new Scene();
+
+      // Add a glTF model to the scene
+      scene.addNode(new Gltf2Node({url: 'media/gltf/space/forest.glb'}));
+
+      // Add a skybox
+      scene.addNode(new SkyboxNode({url: 'media/textures/industrial_sunset_puresky.jpg'}));
+
+      // Create a directional light (sunlight)
+      let sunlight = new DirectionalLight({
+        color: 0xffffff,        // Sunlight color (white)
+        intensity: 1.0,         // Intensity of the sunlight
+        direction: [0, -1, 0]   // Direction of the sunlight (top-down)
+      });
+
+      // Add the sunlight to the scene
+      scene.addNode(sunlight);
+
+      function initXR() {
+        xrButton = new WebXRButton({
+          onRequestSession: onRequestSession,
+          onEndSession: onEndSession
+        });
+        document.querySelector('header').appendChild(xrButton.domElement);
+
+        if (navigator.xr) {
+          navigator.xr.isSessionSupported('immersive-vr').then((supported) => {
+            xrButton.enabled = supported;
+          });
+        }
+      }
+
+      function onRequestSession() {
+        return navigator.xr.requestSession('immersive-vr').then(onSessionStarted);
+      }
+
+      function onSessionStarted(session) {
+        xrButton.setSession(session);
+        session.addEventListener('end', onSessionEnded);
+
+        gl = createWebGLContext({xrCompatible: true});
+        renderer = new Renderer(gl);
+        scene.setRenderer(renderer);
+        session.updateRenderState({baseLayer: new XRWebGLLayer(session, gl)});
+
+        session.requestReferenceSpace('local').then((refSpace) => {
+          xrRefSpace = refSpace;
+          session.requestAnimationFrame(onXRFrame);
+        });
+      }
+
+      function onEndSession(session) {
+        session.end();
+      }
+
+      function onSessionEnded(event) {
+        xrButton.setSession(null);
+        renderer = null;
+      }
+
+      function onXRFrame(t, frame) {
+        let session = frame.session;
+        scene.startFrame();
+        session.requestAnimationFrame(onXRFrame);
+
+        let pose = frame.getViewerPose(xrRefSpace);
+
+        if (pose) {
+          let glLayer = session.renderState.baseLayer;
+          gl.bindFramebuffer(gl.FRAMEBUFFER, glLayer.framebuffer);
+          gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+          for (let view of pose.views) {
+            let viewport = glLayer.getViewport(view);
+            gl.viewport(viewport.x, viewport.y, viewport.width, viewport.height);
+            scene.draw(view.projectionMatrix, view.transform);
+          }
+        }
+
+        scene.endFrame();
+      }
+
+      initXR();
+    </script>
+  </body>
+</html>
