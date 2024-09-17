@@ -72,32 +72,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       scene.addNode(new Gltf2Node({url: 'media/gltf/space/forest.glb'}));
       scene.addNode(new SkyboxNode({url: 'media/textures/sky.jpg'}));
 
-      // Directional light setup for your WebGL scene (sunlight)
-function addSunlight(scene) {
-  const directionalLight = {
-    color: [1, 1, 1],  // White light (normalized RGB values)
-    direction: [-1, -1, -1],  // Direction the light comes from
-    intensity: 1.0  // Strength of the light
-  };
-
-  scene.addDirectionalLight(directionalLight);
-}
-
-// In your session start or scene initialization, call the function
-scene.addNode(new Gltf2Node({ url: 'media/gltf/space/forest.glb' }));
-
-addSunlight(scene);  // Add sunlight to your scene
-
-
-//       import { DirectionalLight } from './js/render/lights/directional-light.js'; // Ensure this is correctly imported
-
-// let sunlight = new DirectionalLight({
-//   color: 0xffffff,   // White light
-//   intensity: 1.5,    // Adjust as necessary
-//   direction: [1, -1, -0.5] // Direction of sunlight
-// });
-
-// scene.addNode(sunlight); // Add the sunlight to the scene
 
       // Checks to see if WebXR is available and, if so, queries a list of
       // XRDevices that are connected to the system.
