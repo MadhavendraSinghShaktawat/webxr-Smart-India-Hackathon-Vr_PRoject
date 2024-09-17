@@ -70,17 +70,17 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       let renderer = null;
       let scene = new Scene();
       scene.addNode(new Gltf2Node({url: 'media/gltf/space/forest.glb'}));
-      scene.addNode(new SkyboxNode({url: 'media/textures/industrial_sunset_puresky.jpg'}));
+      scene.addNode(new SkyboxNode({url: 'media/textures/sky.jpg'}));
 
+      import { DirectionalLight } from './js/render/lights/directional-light.js'; // Ensure this is correctly imported
 
-      // import { DirectionalLight } from './js/render/lights/directional-light.js';
-      // let sunlight = new DirectionalLight({
-      //   color: 0xffffff,   // White light simulating sunlight
-      //   intensity: 1.5,    // You can adjust this for brightness
-      //   direction: [1, -1, -0.5] // Set direction for sunlight
-      // });
+let sunlight = new DirectionalLight({
+  color: 0xffffff,   // White light
+  intensity: 1.5,    // Adjust as necessary
+  direction: [1, -1, -0.5] // Direction of sunlight
+});
 
-      // scene.addNode(sunlight);
+scene.addNode(sunlight); // Add the sunlight to the scene
 
       // Checks to see if WebXR is available and, if so, queries a list of
       // XRDevices that are connected to the system.
