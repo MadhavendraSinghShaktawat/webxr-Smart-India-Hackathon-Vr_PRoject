@@ -73,14 +73,14 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       scene.addNode(new SkyboxNode({url: 'media/textures/industrial_sunset_puresky.jpg'}));
 
 
-      import { DirectionalLight } from './js/render/lights/directional-light.js';
-      let sunlight = new DirectionalLight({
-        color: 0xffffff,   // White light simulating sunlight
-        intensity: 1.5,    // You can adjust this for brightness
-        direction: [1, -1, -0.5] // Set direction for sunlight
-      });
+      // import { DirectionalLight } from './js/render/lights/directional-light.js';
+      // let sunlight = new DirectionalLight({
+      //   color: 0xffffff,   // White light simulating sunlight
+      //   intensity: 1.5,    // You can adjust this for brightness
+      //   direction: [1, -1, -0.5] // Set direction for sunlight
+      // });
 
-      scene.addNode(sunlight);
+      // scene.addNode(sunlight);
 
       // Checks to see if WebXR is available and, if so, queries a list of
       // XRDevices that are connected to the system.
